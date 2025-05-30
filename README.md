@@ -1,1 +1,0 @@
-# capolavoro2025
