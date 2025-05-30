@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Arduino Code</title>
+    <style>
+    html {
+        margin: 0;
+        padding: 0;
+    }
+        body {
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            background-color: #FBD899;
+        }
+         .container {
+        max-width: 800px;
+        margin: 0 auto; /* modificato */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        background-color: #F2C464;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1); /* added box-shadow effect */
+        overflow-x: auto; 
+        overflow-y: auto; 
+        margin-top: 0; /* aggiunto */
+    }
+        h1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: #663300;
+            margin-bottom: 30px;
+        }
+        code {
+            display: block;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* added box-shadow effect */
+            white-space: pre-wrap;
+            background-color: #FBD899;
+            padding: 20px;
+            border-radius: 20px;
+            line-height: 1.5;
+            overflow-x: auto; 
+            max-height: 435px;
+            overflow-y: scroll;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        pre::-webkit-scrollbar {
+            width: 10px;
+        }
+        pre::-webkit-scrollbar-track {
+            background-color: #FED07D;
+        }
+        pre::-webkit-scrollbar-thumb {
+            background-color: #FED07D;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Arduino Code</h1>
+        <code>
+#include &lt;LiquidCrystal_I2C.h&gt;<br><br>
+
+LiquidCrystal_I2C lcd(0x3f, 16, 4);<br><br>
+
+const int LEDRM=13;<br>
+const int LEDGM=12;<br>
+const int LEDVM=11;<br>
+const int LEDRP=5;<br>
+const int LEDVP=4;<br>
+const int pulsante1=6;<br>
+int cont;<br>
+String riga1 = "BENVENUTI!";<br><br>
+
+String riga7 = "CHIAMATA PRENOTATA";<br>
+int buzzer = 8;<br>
+int frequenza = 800;<br>
+int durataVerdePedoni= 500;<br>
+const int ledR2 = 7;<br>
+const int ledG2 = 8;<br>
+const int ledV2 = 9;<br>
+const int pedV2 = 10;<br>
+const int pedR2 = 0;<br>
+int pulsante2 = 13;<br>
+int chiamata2=0;<br><br>
+
+// definizione della variabile t (tempo)<br>
+unsigned long t = 0;<br>
+int chiamata = 0;<br><br>
+
+void setup() {<br>
+&nbsp;&nbsp;pinMode(LEDRM, OUTPUT);<br>
+&nbsp;&nbsp;pinMode(LEDGM, OUTPUT);<br>
+&nbsp;&nbsp;pinMode(LEDVM, OUTPUT);<br>
+&nbsp;&nbsp;pinMode(LEDRP, OUTPUT);<br>
+&nbsp;&nbsp;pinMode(LEDVP, OUTPUT);<br>
+&nbsp;&nbsp;pinMode(pulsante1, INPUT);<br>
+&nbsp;&nbsp;lcd.init();<br>
+&nbsp;&nbsp;lcd.backlight();<br>
+&nbsp;&nbsp;pinMode(LED_PIN, OUTPUT);<br>
+&nbsp;&nbsp;analogWrite(LED_PIN, 50);<br>
+}<br><br>
+
+void numdecrementorosso(int durata) {<br>
+&nbsp;&nbsp;t = millis();<br>
+&nbsp;&nbsp;for (cont = 8; cont &gt;= 0; cont--) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante1) == HIGH) chiamata = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante2) == HIGH) chiamata2 = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.setCursor(9, 1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.print(cont);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;delay(1000);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void numdecrementoverde(int durata) {<br>
+&nbsp;&nbsp;t = millis();<br>
+&nbsp;&nbsp;for (cont = 8; cont &gt;= 0; cont--) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante1) == HIGH) chiamata = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante2) == HIGH) chiamata2 = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.setCursor(9, 1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.print(cont);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;delay(1000);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void numdecrementogiallo(int durata) {<br>
+&nbsp;&nbsp;t = millis();<br>
+&nbsp;&nbsp;for (cont = 5; cont &gt;= 0; cont--) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante1) == HIGH) chiamata = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.setCursor(12, 1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.print(cont);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;delay(1000);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void tempo(int durata) {<br>
+&nbsp;&nbsp;t = millis();<br>
+&nbsp;&nbsp;while ((millis()-t) &lt; durata) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante1) == HIGH) chiamata = 1;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (digitalRead(pulsante2) == HIGH) chiamata2 = 1;<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void loop() {<br>
+&nbsp;&nbsp;chiamata=0;<br>
+&nbsp;&nbsp;chiamata2=0;<br>
+&nbsp;&nbsp;lcd.clear();<br>
+&nbsp;&nbsp;lcd.setCursor(0, 0);<br>
+&nbsp;&nbsp;typewriting(riga1);<br><br>
+&nbsp;&nbsp;digitalWrite(LEDRP, HIGH);<br>
+&nbsp;&nbsp;digitalWrite(pedR2, HIGH);<br>
+&nbsp;&nbsp;digitalWrite(ledR2, LOW);<br>
+&nbsp;&nbsp;digitalWrite(ledV2, HIGH);<br>
+&nbsp;&nbsp;digitalWrite(LEDRM, HIGH);<br><br>
+
+&nbsp;&nbsp;numdecrementorosso(2000);<br>
+&nbsp;&nbsp;digitalWrite(ledV2, LOW);<br>
+&nbsp;&nbsp;digitalWrite(ledG2, HIGH);<br>
+&nbsp;&nbsp;tempo(500);<br>
+&nbsp;&nbsp;digitalWrite(ledG2, LOW);<br>
+&nbsp;&nbsp;digitalWrite(ledR2, HIGH);<br>
+&nbsp;&nbsp;tempo(2000);<br>
+&nbsp;&nbsp;digitalWrite(LEDRM, LOW);<br>
+&nbsp;&nbsp;digitalWrite(LEDVM, HIGH);<br><br>
+
+&nbsp;&nbsp;numdecrementoverde(2000);<br>
+&nbsp;&nbsp;digitalWrite(LEDVM, LOW);<br>
+&nbsp;&nbsp;digitalWrite(LEDGM, HIGH);<br>
+&nbsp;&nbsp;digitalWrite(ledG2, LOW);<br>
+&nbsp;&nbsp;digitalWrite(ledR2, HIGH);<br>
+&nbsp;&nbsp;numdecrementogiallo(1000);<br>
+&nbsp;&nbsp;digitalWrite(ledR2, LOW);<br>
+&nbsp;&nbsp;digitalWrite(LEDRM, HIGH);<br>
+&nbsp;&nbsp;digitalWrite(LEDGM, LOW);<br><br>
+
+&nbsp;&nbsp;if(chiamata==1){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LEDRM,HIGH);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LEDRP,LOW);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LEDVP,HIGH);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LEDVP,LOW);<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;if (chiamata2 == 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(ledR2,HIGH);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(pedR2,LOW);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(pedV2,HIGH);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.clear();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.setCursor(0, 0);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;typewriting(riga7);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numdecrementoverdepedoni();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(pedV2,LOW);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void numdecrementoverdepedoni() {<br>
+&nbsp;&nbsp;for (cont = 5; cont &gt;= 0; cont--) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.setCursor(15, 1);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.print(cont);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;delay(500);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tone(buzzer, frequenza, durataVerdePedoni);<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+
+void typewriting(String messaggio){<br>
+&nbsp;&nbsp;int lunghezza = messaggio.length();<br>
+&nbsp;&nbsp;for(int i = 0; i &lt; lunghezza; i++){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lcd.print(messaggio[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;delay(100);<br>
+&nbsp;&nbsp;}<br>
+}<br>
+        </code>
+    </div>
+</body>
+
+</html>
